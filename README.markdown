@@ -22,11 +22,14 @@ Usage
     end
 
     product.title -> 'Hello' #I18n.locale == :en
-    product.title_fr -> 'Bonyour'
-    product.title_de -> 'Hallo'
+    product.title_in_fr -> 'Bonyour'
+    product.title_in_de -> 'Hallo'
 
     product.title = 'Simple setting'
-    product.title_de = 'Spezifisches speichern'
+    product.title_in_de = 'Spezifisches speichern'
+
+    product.title=('Specific setting', :en)
+    product.title(:en) -> 'Specific setting'
     --STILL ALPHA BEWARE--
 
 Options
