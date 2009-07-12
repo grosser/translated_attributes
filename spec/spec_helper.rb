@@ -10,6 +10,7 @@ ActiveRecord::Base.establish_connection({
   :adapter => "sqlite3",
   :database => ":memory:",
 })
-require 'spec/models'
 
 require File.expand_path("../init", File.dirname(__FILE__))
+
+require 'spec/models'
