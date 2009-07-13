@@ -76,6 +76,31 @@ describe 'Virtual Translations' do
       }.should_not change(Translation, :count)
     end
 
+    it "does not update translations when nothing changed" do
+      p = Product.create!(:title=>'xx')
+      lambda{ p.save }.should_not change{Translation.last.id}
+    end
+
+    it "works through update_attribute" do
+      p = Product.create!(:title=>'xx')
+      p.update_attribute(:title, 'yy')
+      Product.last.title.should == 'yy'
+    end
+
+    it "works through update_attributes" do
+      p = Product.create!(:title=>'xx')
+      p.update_attributes(:title=>'yy')
+      Product.last.title.should == 'yy'
+    end
+
+    it "loads translations once" do
+      Product.create!(:title=>'xx', :description=>'yy')
+      p = Product.last
+      p.translations.should_receive(:all).and_return []
+      p.title.should == nil
+      p.description.should == nil
+    end
+
     it "deletes the existing translation when changing to blank" do
       p = Product.create!(:title=>'1')
       lambda{
@@ -91,6 +116,33 @@ describe 'Virtual Translations' do
       }.should change(Translation, :count).by(+2)
       Product.last.title_in_de.should == 'Hallo'
       Product.last.title.should == 'Hello'
+    end
+  end
+
+  describe :method_missing do
+    it "ignores calls without _in_" do
+      lambda{Product.new.title_xxx}.should raise_error
+    end
+    it "ignores calls with a non-supported attribute" do
+      lambda{Product.new.foo_in_de}.should raise_error
+    end
+  end
+
+  describe :respond_to? do
+    it "ignores calls without _in_" do
+      Product.new.respond_to?(:title_xx_xx).should == false
+    end
+
+    it "ignores calls with a non-supported attribute" do
+      Product.new.respond_to?(:foo_in_de).should == false
+    end
+
+    it "responds to translated column" do
+      Product.new.respond_to?(:title_in_en).should == true
+    end
+
+    it "responds to normal methods" do
+      Product.new.respond_to?(:new_record?).should == true
     end
   end
 end

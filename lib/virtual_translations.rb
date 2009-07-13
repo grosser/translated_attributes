@@ -67,6 +67,7 @@ GETTER_AND_SETTER
           translations.create!(:attribute=>attribute, :text=>value, :language=>locale)
         end
       end
+      @virtual_translations_changed = false
     end
 
     private
