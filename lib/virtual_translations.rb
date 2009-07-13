@@ -1,11 +1,23 @@
 module VirtualTranslations
   module ClassMethods
     def virtual_translations(*args)
+      #store options
       cattr_accessor :virtual_translations_options
-
       options = args.extract_options! || {}
       self.virtual_translations_options = options.merge(:fields=>args)
 
+      #create translations class
+      table_name = options[:table_name] || :translations
+
+      klass = Class.new(ActiveRecord::Base)
+      Object.const_set(table_name.to_s.classify, klass)
+      klass.set_table_name table_name
+      klass.belongs_to :translateable, :polymorphic => true
+
+      #set translations
+      has_many :translations, :as => :translateable, :dependent => :delete_all, :class_name=>klass.name
+      
+      #include methods
       include VirtualTranslations::InstanceMethods
     end
   end
@@ -25,7 +37,6 @@ module VirtualTranslations
 GETTER_AND_SETTER
       end
 
-      base.has_many :translations, :as => :translateable, :dependent => :delete_all
       base.after_save :store_virtual_translations
     end
 

@@ -119,6 +119,21 @@ describe 'Virtual Translations' do
     end
   end
 
+  describe 'different tables' do
+    it "creates the model for each table_name" do
+      Translation
+      UserTranslation
+    end
+
+    it "creates translations in set table" do
+      Product.create!(:title=>'yyy')
+      Translation.last.text.should == 'yyy'
+
+      User.create!(:name=>'xxx')
+      UserTranslation.last.text.should == 'xxx'
+    end
+  end
+
   describe :method_missing do
     it "ignores calls without _in_" do
       lambda{Product.new.title_xxx}.should raise_error

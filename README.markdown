@@ -14,14 +14,15 @@ Validations work like normal, you can validate on the current field (e.g. title)
 
 Usage
 =====
-    --STILL ALPHA BEWARE--
+Setup
     script/plugin install git://github.com/grosser/virtual_translations.git
 
     class Product < ActiveRecord::Base
       virtual_translations :description, :title, :additional_info
     end
 
-    product.title -> 'Hello' #I18n.locale == :en
+Setting / getting values (without persisting them)
+    product.title -> 'Hello' #when I18n.locale is :en
     product.title_in_fr -> 'Bonyour'
     product.title_in_de -> 'Hallo'
 
@@ -30,11 +31,12 @@ Usage
 
     product.title=('Specific setting', :en)
     product.title(:en) -> 'Specific setting'
-    --STILL ALPHA BEWARE--
+
+Usage with saving works exactly like normal saving, e.g. new/create/update_attributes...
 
 Options
 =======
-    :table_name => 'virtual_translations' #default is translations
+    :table_name => 'user_translations' #default is translations
 
 Author
 ======
