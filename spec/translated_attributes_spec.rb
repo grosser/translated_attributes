@@ -144,6 +144,46 @@ describe 'Translated attributes' do
     end
   end
 
+  describe :translated_attriutes= do
+    it "stores all translations" do
+      p = Product.create!
+      p.translated_attributes = {:de=>{:title=>'de title',:description=>'de descr'}}
+      p.title_in_de.should == 'de title'
+      p.description_in_de.should == 'de descr'
+      p.title_in_en.should == nil
+    end
+
+    it "overwrites existing translations" do
+      p = Product.create!(:title=>'en title')
+      p.translated_attributes = {:de=>{:title=>'de title',:description=>'de descr'}}
+      p.title_in_de.should == 'de title'
+      p.description_in_de.should == 'de descr'
+      p.title_in_en.should == nil
+    end
+    
+    it "stores and overwrites on save" do
+      p = Product.create!(:title=>'en title')
+      p.translated_attributes = {:de=>{:title=>'de title',:description=>'de descr'}}
+      p.save!
+      Product.last.title.should == nil
+      Product.last.title_in_de.should == 'de title'
+    end
+
+    it "does not alter the given hash" do
+      p = Product.create!(:title=>'en title')
+      hash = {:de=>{:title=>'de title',:description=>'de descr'}}
+      p.translated_attributes = hash
+      hash['de'].should == nil #not converted to indifferent access
+      hash[:de][:title].should == 'de title' #still has all attributes
+    end
+
+    it "stores given hash indifferent" do
+      p = Product.new
+      p.translated_attributes = {'de'=>{'title'=>'title de'}}
+      p.translated_attributes[:de][:title].should == 'title de'
+    end
+  end
+
   describe :method_missing do
     it "ignores calls without _in_" do
       lambda{Product.new.title_xxx}.should raise_error

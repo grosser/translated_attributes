@@ -55,6 +55,12 @@ GETTER_AND_SETTER
       @translated_attributes ||= {}.with_indifferent_access
     end
 
+    def translated_attributes= hash
+      @db_translations_merged = true #do not overwrite what we set here
+      @translated_attributes_changed = true #store changes we made
+      @translated_attributes = hash.with_indifferent_access
+    end
+
     def respond_to?(name, *args)
       return true if parse_translated_attribute_method(name)
       super
