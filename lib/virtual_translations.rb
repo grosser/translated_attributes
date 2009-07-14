@@ -16,7 +16,7 @@ module VirtualTranslations
 
       #set translations
       has_many :translations, :as => :translateable, :dependent => :delete_all, :class_name=>klass.name
-      
+
       #include methods
       include VirtualTranslations::InstanceMethods
     end
@@ -42,14 +42,19 @@ GETTER_AND_SETTER
 
     def get_virtual_translation(locale, field)
       merge_db_translations_with_virtual
-      virtual_translations(locale)[field]
+      virtual_translations_for(locale)[field]
     end
 
     def set_virtual_translation(locale, field, value)
       merge_db_translations_with_virtual
-      return if virtual_translations(locale)[field] == value
-      virtual_translations(locale)[field] = value
+      return if virtual_translations_for(locale)[field] == value
+      virtual_translations_for(locale)[field] = value
       @virtual_translations_changed = true
+    end
+
+    def virtual_translations
+      merge_db_translations_with_virtual
+      (@virtual_translations||{}).dup.freeze
     end
 
     def respond_to?(name, *args)
@@ -87,7 +92,7 @@ GETTER_AND_SETTER
       return if new_record? or @db_translations_merged
       @db_translations_merged = true
       translations.all.each do |t|
-        virtual_translations(t.language)[t.attribute] = t.text
+        virtual_translations_for(t.language)[t.attribute] = t.text
       end
     end
 
@@ -99,7 +104,7 @@ GETTER_AND_SETTER
       return field, locale
     end
 
-    def virtual_translations(locale)
+    def virtual_translations_for(locale)
       @virtual_translations ||= {}.with_indifferent_access
       @virtual_translations[locale] ||= {}.with_indifferent_access
       @virtual_translations[locale]

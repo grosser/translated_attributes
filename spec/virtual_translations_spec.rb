@@ -134,6 +134,22 @@ describe 'Virtual Translations' do
     end
   end
 
+  describe :virtual_translations do
+    it "is a empty hash when nothing was set" do
+      Product.new.virtual_translations.should == {}
+    end
+
+    it "cannot be modified" do
+      Product.new.virtual_translations.should be_frozen
+    end
+
+    it "does not freeze the original" do
+      p = Product.new
+      p.virtual_translations
+      p.instance_variable_get('@virtual_translations').should_not be_frozen
+    end
+  end
+
   describe :method_missing do
     it "ignores calls without _in_" do
       lambda{Product.new.title_xxx}.should raise_error
