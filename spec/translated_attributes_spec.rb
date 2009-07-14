@@ -139,14 +139,8 @@ describe 'Translated attributes' do
       Product.new.translated_attributes.should == {}
     end
 
-    it "cannot be modified" do
-      Product.new.translated_attributes.should be_frozen
-    end
-
-    it "does not freeze the original" do
-      p = Product.new
-      p.translated_attributes
-      p.instance_variable_get('@translated_attributes').should_not be_frozen
+    it "can be modified" do
+      Product.new.translated_attributes.should_not be_frozen
     end
   end
 

@@ -41,12 +41,10 @@ GETTER_AND_SETTER
     end
 
     def get_translated_attribute(locale, field)
-      merge_db_translations_with_instance_variable
       translated_attributes_for(locale)[field]
     end
 
     def set_translated_attribute(locale, field, value)
-      merge_db_translations_with_instance_variable
       return if translated_attributes_for(locale)[field] == value
       translated_attributes_for(locale)[field] = value
       @translated_attributes_changed = true
@@ -54,7 +52,7 @@ GETTER_AND_SETTER
 
     def translated_attributes
       merge_db_translations_with_instance_variable
-      (@translated_attributes||{}).dup.freeze
+      @translated_attributes ||= {}.with_indifferent_access
     end
 
     def respond_to?(name, *args)
@@ -105,9 +103,8 @@ GETTER_AND_SETTER
     end
 
     def translated_attributes_for(locale)
-      @translated_attributes ||= {}.with_indifferent_access
-      @translated_attributes[locale] ||= {}.with_indifferent_access
-      @translated_attributes[locale]
+      translated_attributes[locale] ||= {}.with_indifferent_access
+      translated_attributes[locale]
     end
   end
 end
