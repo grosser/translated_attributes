@@ -31,7 +31,7 @@ module VirtualTranslations
     def self.included(base)
       fields = base.translated_attributes_options[:fields]
       fields.each do |field|
-        eval <<GETTER_AND_SETTER
+        base.class_eval <<GETTER_AND_SETTER
           def #{field}(locale=nil)
             get_translated_attribute(locale, :#{field})
           end

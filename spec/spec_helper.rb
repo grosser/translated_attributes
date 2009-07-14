@@ -11,6 +11,8 @@ ActiveRecord::Base.establish_connection({
   :database => ":memory:",
 })
 
+#ActiveRecord::Base.logger = Logger.new(STDOUT)
+
 require File.expand_path("../init", File.dirname(__FILE__))
 
 require 'spec/models'

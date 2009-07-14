@@ -179,7 +179,7 @@ describe 'Translated attributes' do
 
   describe 'nil to blank' do
     it "converts all unfound fields to blank" do
-      User.new.title.should == ''
+      User.new.name.should == ''
     end
   end
 
@@ -214,7 +214,7 @@ describe 'Translated attributes' do
       p = Product.create!(:title=>'en title')
       p.translated_attributes = {:de=>{:title=>'de title',:description=>'de descr'}}
       p.save!
-      Product.last.title.should == nil
+      Product.last.title.should == 'de title'
       Product.last.title_in_de.should == 'de title'
     end
 
