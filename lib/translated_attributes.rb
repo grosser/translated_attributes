@@ -8,11 +8,16 @@ module VirtualTranslations
 
       #create translations class
       table_name = options[:table_name] || :translations
+      class_name = table_name.to_s.classify
 
-      klass = Class.new(ActiveRecord::Base)
-      Object.const_set(table_name.to_s.classify, klass)
-      klass.set_table_name table_name
-      klass.belongs_to :translateable, :polymorphic => true
+      begin
+        klass = Object.const_get(class_name)
+      rescue
+        klass = Class.new(ActiveRecord::Base)
+        Object.const_set(class_name, klass)
+        klass.set_table_name table_name
+        klass.belongs_to :translateable, :polymorphic => true
+      end
 
       #set translations
       has_many :translations, :as => :translateable, :dependent => :delete_all, :class_name=>klass.name

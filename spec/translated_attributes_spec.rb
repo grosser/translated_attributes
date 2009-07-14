@@ -119,6 +119,17 @@ describe 'Translated attributes' do
     end
   end
 
+  describe 'classes' do
+    it "does not define them twice" do
+      Translation.instance_variable_set '@test', 1
+      class XXX < ActiveRecord::Base
+        set_table_name :products
+        translated_attributes :name
+      end
+      Translation.instance_variable_get('@test').should == 1
+    end
+  end
+
   describe 'different tables' do
     it "creates the model for each table_name" do
       Translation
