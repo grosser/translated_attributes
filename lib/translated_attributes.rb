@@ -32,7 +32,7 @@ module VirtualTranslations
       fields = base.translated_attributes_options[:fields]
       fields.each do |field|
         eval <<GETTER_AND_SETTER
-          def #{field}(locale=I18n.locale)
+          def #{field}(locale=nil)
             get_translated_attribute(locale, :#{field})
           end
 
@@ -42,7 +42,7 @@ module VirtualTranslations
 
           #TODO if options[:setter_and_getters]
           #backwards compatability...
-          def get_#{field}(locale=I18n.locale)
+          def get_#{field}(locale=nil)
             get_translated_attribute(locale, :#{field})
           end
 
@@ -56,7 +56,18 @@ GETTER_AND_SETTER
     end
 
     def get_translated_attribute(locale, field)
-      translated_attributes_for(locale)[field] or (self.class.translated_attributes_options[:nil_to_blank] and '')
+      text = if locale
+        translated_attributes_for(locale)[field]
+      else
+        #try to find anything...
+        if translated_attributes[:en] and translated_attributes[:en][field]
+          translated_attributes[:en][field]
+        else
+          found = translated_attributes.detect{|locale, attributes| attributes[field]}
+          found ? found[1][field] : nil
+        end
+      end
+      text or (self.class.translated_attributes_options[:nil_to_blank] and '')
     end
 
     def set_translated_attribute(locale, field, value)

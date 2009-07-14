@@ -45,6 +45,20 @@ describe 'Translated attributes' do
       p.title = 'bcd'
       p.title_in_de.should == 'bcd'
     end
+
+    it "returns english translation when current cannot be found" do
+      I18n.locale = :de
+      p = Product.new
+      p.title_in_en = 'abc'
+      p.title.should == 'abc'
+    end
+
+    it "returns any translation when current and english cannot be found" do
+      I18n.locale = :fr
+      p = Product.new
+      p.title_in_de = 'abc'
+      p.title.should == 'abc'
+    end
   end
 
   describe 'storing' do
