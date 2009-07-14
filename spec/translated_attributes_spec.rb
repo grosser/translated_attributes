@@ -142,6 +142,10 @@ describe 'Translated attributes' do
       end
       Translation.instance_variable_get('@test').should == 1
     end
+
+    it "stores options seperately" do
+      Shop.translated_attributes_options[:fields].should_not == Product.translated_attributes_options[:fields]
+    end
   end
 
   describe 'different tables' do

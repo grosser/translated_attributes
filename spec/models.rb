@@ -21,6 +21,11 @@ class User < ActiveRecord::Base
   translated_attributes :name, :table_name=>:user_translations, :nil_to_blank=>true
 end
 
+class Shop < ActiveRecord::Base
+  set_table_name :products
+  translated_attributes :shop_name
+end
+
 class Product < ActiveRecord::Base
   translated_attributes :title, :description
 end
