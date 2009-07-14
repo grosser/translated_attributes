@@ -1,1 +1,1 @@
-require 'virtual_translations'
+require 'translated_attributes'

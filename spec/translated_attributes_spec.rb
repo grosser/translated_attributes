@@ -1,6 +1,6 @@
 require 'spec/spec_helper'
 
-describe 'Virtual Translations' do
+describe 'Translated attributes' do
   before do
     I18n.locale = :en
   end
@@ -134,19 +134,19 @@ describe 'Virtual Translations' do
     end
   end
 
-  describe :virtual_translations do
+  describe :translated_attributes do
     it "is a empty hash when nothing was set" do
-      Product.new.virtual_translations.should == {}
+      Product.new.translated_attributes.should == {}
     end
 
     it "cannot be modified" do
-      Product.new.virtual_translations.should be_frozen
+      Product.new.translated_attributes.should be_frozen
     end
 
     it "does not freeze the original" do
       p = Product.new
-      p.virtual_translations
-      p.instance_variable_get('@virtual_translations').should_not be_frozen
+      p.translated_attributes
+      p.instance_variable_get('@translated_attributes').should_not be_frozen
     end
   end
 

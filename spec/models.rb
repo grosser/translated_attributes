@@ -18,9 +18,9 @@ end
 
 #create model
 class User < ActiveRecord::Base
-  virtual_translations :name, :table_name=>:user_translations
+  translated_attributes :name, :table_name=>:user_translations
 end
 
 class Product < ActiveRecord::Base
-  virtual_translations :title, :description
+  translated_attributes :title, :description
 end
