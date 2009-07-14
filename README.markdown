@@ -37,6 +37,7 @@ Usage with saving works exactly like normal saving, e.g. new/create/update_attri
 Options
 =======
     :table_name => 'user_translations' #default is translations
+    :nil_to_blank => true #default false, return unfound translations as blank strings ('') instead of nil
 
 Author
 ======

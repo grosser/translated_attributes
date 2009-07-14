@@ -18,7 +18,7 @@ end
 
 #create model
 class User < ActiveRecord::Base
-  translated_attributes :name, :table_name=>:user_translations
+  translated_attributes :name, :table_name=>:user_translations, :nil_to_blank=>true
 end
 
 class Product < ActiveRecord::Base

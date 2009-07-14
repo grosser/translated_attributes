@@ -39,6 +39,16 @@ module VirtualTranslations
           def #{field}=(value, locale=I18n.locale)
             set_translated_attribute locale, :#{field}, value
           end
+
+          #TODO if options[:setter_and_getters]
+          #backwards compatability...
+          def get_#{field}(locale=I18n.locale)
+            get_translated_attribute(locale, :#{field})
+          end
+
+          def set_#{field}(value, locale=I18n.locale)
+            set_translated_attribute locale, :#{field}, value
+          end
 GETTER_AND_SETTER
       end
 
@@ -46,7 +56,7 @@ GETTER_AND_SETTER
     end
 
     def get_translated_attribute(locale, field)
-      translated_attributes_for(locale)[field]
+      translated_attributes_for(locale)[field] or (self.class.translated_attributes_options[:nil_to_blank] and '')
     end
 
     def set_translated_attribute(locale, field, value)

@@ -17,6 +17,13 @@ describe 'Translated attributes' do
       p.title.should == 'abc'
     end
 
+    it 'can be overwritten' do
+      p = Product.new
+      p.title = 'abc'
+      p.title = 'def'
+      p.title.should == 'def'
+    end
+
     it "ca be unset" do
       p = Product.new
       p.title = 'abc'
@@ -93,6 +100,13 @@ describe 'Translated attributes' do
       Product.last.title.should == 'yy'
     end
 
+    it "works through attributes=" do
+      p = Product.create!(:title=>'xx')
+      p.attributes = {:title=>'yy'}
+      p.save!
+      Product.last.title.should == 'yy'
+    end
+
     it "loads translations once" do
       Product.create!(:title=>'xx', :description=>'yy')
       p = Product.last
@@ -142,6 +156,12 @@ describe 'Translated attributes' do
 
       User.create!(:name=>'xxx')
       UserTranslation.last.text.should == 'xxx'
+    end
+  end
+
+  describe 'nil to blank' do
+    it "converts all unfound fields to blank" do
+      User.new.title.should == ''
     end
   end
 
