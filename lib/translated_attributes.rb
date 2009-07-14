@@ -41,29 +41,29 @@ GETTER_AND_SETTER
     end
 
     def get_translated_attribute(locale, field)
-      merge_db_translations_with_virtual
+      merge_db_translations_with_instance_variable
       translated_attributes_for(locale)[field]
     end
 
     def set_translated_attribute(locale, field, value)
-      merge_db_translations_with_virtual
+      merge_db_translations_with_instance_variable
       return if translated_attributes_for(locale)[field] == value
       translated_attributes_for(locale)[field] = value
       @translated_attributes_changed = true
     end
 
     def translated_attributes
-      merge_db_translations_with_virtual
+      merge_db_translations_with_instance_variable
       (@translated_attributes||{}).dup.freeze
     end
 
     def respond_to?(name, *args)
-      return true if parse_virtual_tranlation_method(name)
+      return true if parse_translated_attribute_method(name)
       super
     end
 
     def method_missing(name, *args)
-      field, locale = parse_virtual_tranlation_method(name)
+      field, locale = parse_translated_attribute_method(name)
       return super unless field
       if name.to_s.include? '=' #is setter ?
         send("#{field}=", args[0], locale)
@@ -88,7 +88,7 @@ GETTER_AND_SETTER
 
     private
 
-    def merge_db_translations_with_virtual
+    def merge_db_translations_with_instance_variable
       return if new_record? or @db_translations_merged
       @db_translations_merged = true
       translations.all.each do |t|
@@ -96,7 +96,7 @@ GETTER_AND_SETTER
       end
     end
 
-    def parse_virtual_tranlation_method(name)
+    def parse_translated_attribute_method(name)
       return false if name.to_s !~ /^([a-zA-Z_]+)_in_([a-z]{2})[=]?$/
       field = $1; locale = $2
       fields = self.class.translated_attributes_options[:fields]
