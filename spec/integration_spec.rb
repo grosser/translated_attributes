@@ -21,15 +21,6 @@ describe 'Integration' do
     User.last.name.should == 'User1NameFr'
   end
 
-  it "does nothing silly when reloading" do
-    User.create!(:name=>'User1NameEn')
-    u = User.create!(:name=>'User2NameEn')
-    u.name = 'Name2'
-    u.reload
-    u.save!
-    User.last.name.should == 'Name2'
-  end
-
   it "cleans up translations" do
     User.create!(:name=>'u1')
     Product.create!(:title=>'p1',:description=>'d1')

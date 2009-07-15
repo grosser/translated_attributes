@@ -89,7 +89,7 @@ describe 'Translated attributes' do
       Product.last.title.should == '2'
     end
 
-    it "updates the existing translation on change" do
+    it "does not create unecessary translations on change" do
       p = Product.create!(:title=>'1')
       lambda{
         p.title = '2'
@@ -99,26 +99,30 @@ describe 'Translated attributes' do
 
     it "does not update translations when nothing changed" do
       p = Product.create!(:title=>'xx')
+      p.title = 'xx'
       lambda{ p.save }.should_not change{Translation.last.id}
     end
 
     it "works through update_attribute" do
-      p = Product.create!(:title=>'xx')
+      p = Product.create!(:title=>'xx', :description=>'dd')
       p.update_attribute(:title, 'yy')
       Product.last.title.should == 'yy'
+      Product.last.description.should == 'dd'
     end
 
     it "works through update_attributes" do
-      p = Product.create!(:title=>'xx')
+      p = Product.create!(:title=>'xx', :description=>'dd')
       p.update_attributes(:title=>'yy')
       Product.last.title.should == 'yy'
+      Product.last.description.should == 'dd'
     end
 
     it "works through attributes=" do
-      p = Product.create!(:title=>'xx')
+      p = Product.create!(:title=>'xx', :description=>'dd')
       p.attributes = {:title=>'yy'}
       p.save!
       Product.last.title.should == 'yy'
+      Product.last.description.should == 'dd'
     end
 
     it "loads translations once" do
@@ -144,6 +148,28 @@ describe 'Translated attributes' do
       }.should change(Translation, :count).by(+2)
       Product.last.title_in_de.should == 'Hallo'
       Product.last.title.should == 'Hello'
+    end
+
+    it "deletes translations when translateable is destroyed" do
+      Translation.delete_all
+      Product.create!(:title=>'t1')
+      Product.create!(:title=>'t2',:description=>'d2')
+      Translation.count.should == 3
+
+      Product.last.destroy
+
+      Translation.count.should == 1
+      Translation.first.text.should == 't1'
+    end
+
+    it "is not influenced by reloading" do
+      p = Product.create!(:title=>'t1', :description=>'d1')
+      p.title = 't2'
+      p.reload
+      p.description = 'd2'
+      p.save!
+      Product.last.title.should == 't2'
+      Product.last.description.should == 'd2'
     end
   end
 
