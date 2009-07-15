@@ -1,5 +1,6 @@
-module VirtualTranslations
+module TranslatedAttributes
   module ClassMethods
+    # translated_attributes :title, :description, :table_name=>'my_translations'
     def translated_attributes(*args)
       #store options
       cattr_accessor :translated_attributes_options
@@ -23,7 +24,7 @@ module VirtualTranslations
       has_many :translations, :as => :translateable, :dependent => :delete_all, :class_name=>klass.name
 
       #include methods
-      include VirtualTranslations::InstanceMethods
+      include TranslatedAttributes::InstanceMethods
     end
   end
 
@@ -37,7 +38,7 @@ module VirtualTranslations
           end
 
           def #{field}=(value, locale=I18n.locale)
-            set_translated_attribute locale, :#{field}, value
+            set_translated_attribute(locale, :#{field}, value)
           end
 
           #TODO if options[:setter_and_getters]
@@ -55,14 +56,20 @@ GETTER_AND_SETTER
         translated_attributes_for(locale)[field]
       else
         #try to find anything...
+        #english first, else anything else
         if translated_attributes[:en] and translated_attributes[:en][field]
           translated_attributes[:en][field]
         else
-          found = translated_attributes.detect{|locale, attributes| attributes[field]}
+          found = translated_attributes.detect{|locale, attributes| not attributes[field].blank?}
           found ? found[1][field] : nil
         end
       end
-      text or (self.class.translated_attributes_options[:nil_to_blank] and '')
+      
+      if self.class.translated_attributes_options[:nil_to_blank]
+        text || ''
+      else
+        text
+      end
     end
 
     def set_translated_attribute(locale, field, value)
@@ -124,9 +131,13 @@ GETTER_AND_SETTER
     def parse_translated_attribute_method(name)
       return false if name.to_s !~ /^([a-zA-Z_]+)_in_([a-z]{2})[=]?$/
       field = $1; locale = $2
-      fields = self.class.translated_attributes_options[:fields]
-      return false unless fields.include? field.sub('=','').to_sym
+      return false unless is_translated_attribute?(field)
       return field, locale
+    end
+
+    def is_translated_attribute?(method_name)
+      fields = self.class.translated_attributes_options[:fields]
+      fields.include? method_name.sub('=','').to_sym
     end
 
     def translated_attributes_for(locale)
@@ -136,4 +147,4 @@ GETTER_AND_SETTER
   end
 end
 
-ActiveRecord::Base.send :extend, VirtualTranslations::ClassMethods
+ActiveRecord::Base.send :extend, TranslatedAttributes::ClassMethods
