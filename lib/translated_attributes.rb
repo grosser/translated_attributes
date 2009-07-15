@@ -42,13 +42,8 @@ module VirtualTranslations
 
           #TODO if options[:setter_and_getters]
           #backwards compatability...
-          def get_#{field}(locale=nil)
-            get_translated_attribute(locale, :#{field})
-          end
-
-          def set_#{field}(value, locale=I18n.locale)
-            set_translated_attribute locale, :#{field}, value
-          end
+          alias get_#{field} #{field}
+          alias set_#{field} #{field}=
 GETTER_AND_SETTER
       end
 
