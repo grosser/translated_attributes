@@ -11,17 +11,18 @@ module TranslatedAttributes
       table_name = options[:table_name] || :translations
       class_name = table_name.to_s.classify
 
+      associated = options[:translatable_name] || :translatable
       begin
         klass = Object.const_get(class_name)
       rescue
         klass = Class.new(ActiveRecord::Base)
         Object.const_set(class_name, klass)
         klass.set_table_name table_name
-        klass.belongs_to :translateable, :polymorphic => true
+        klass.belongs_to associated, :polymorphic => true
       end
 
       #set translations
-      has_many :translations, :as => :translateable, :dependent => :delete_all, :class_name=>klass.name
+      has_many :translations, :as => associated, :dependent => :delete_all, :class_name=>klass.name
 
       #include methods
       include TranslatedAttributes::InstanceMethods

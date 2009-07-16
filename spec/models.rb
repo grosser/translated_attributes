@@ -10,8 +10,8 @@ ActiveRecord::Schema.define(:version => 1) do
       t.string :attribute
       t.text :text
       t.string :language
-      t.integer :translateable_id
-      t.string :translateable_type
+      t.integer :translatable_id
+      t.string :translatable_type
     end
   end
 end

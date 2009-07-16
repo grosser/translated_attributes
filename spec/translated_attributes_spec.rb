@@ -150,7 +150,7 @@ describe 'Translated attributes' do
       Product.last.title.should == 'Hello'
     end
 
-    it "deletes translations when translateable is destroyed" do
+    it "deletes translations when translatable is destroyed" do
       Translation.delete_all
       Product.create!(:title=>'t1')
       Product.create!(:title=>'t2',:description=>'d2')

@@ -1,6 +1,6 @@
 Problem
 =======
-Atm there are 2 ways for making a Model translateable that I know of:
+Atm there are 2 ways for making a Model translatable that I know of:
  - have a copy of a model, where the copy has a language and all fields mirrored
  - have all the translations on the same model
 both are not very effective when it comes to huge data ammounts and need frequent updates/migrations, which is hard with large datasets.
