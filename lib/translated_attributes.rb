@@ -57,9 +57,10 @@ GETTER_AND_SETTER
         translated_attributes_for(locale)[field]
       else
         #try to find anything...
-        #english first, else anything else
-        if translated_attributes[:en] and translated_attributes[:en][field]
-          translated_attributes[:en][field]
+        #current, english, anything else
+        found = translated_attributes_for(I18n.locale)[field] || translated_attributes_for(:en)[field]
+        if found
+          found
         else
           found = translated_attributes.detect{|locale, attributes| not attributes[field].blank?}
           found ? found[1][field] : nil
