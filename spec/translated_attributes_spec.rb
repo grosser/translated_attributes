@@ -2,6 +2,7 @@ require 'spec/spec_helper'
 
 describe 'Translated attributes' do
   before do
+    Product.translated_attributes_options[:nil_to_blank] = false
     I18n.locale = :en
   end
 
@@ -54,17 +55,21 @@ describe 'Translated attributes' do
       p.title.should == 'abc'
     end
 
-    it "returns english translation when current cannot be found" do
-      I18n.locale = :de
-      p = Product.new
-      p.title_in_en = 'abc'
-      p.title.should == 'abc'
-    end
 
     it "returns any translation when current and english cannot be found" do
       I18n.locale = :fr
       p = Product.new
       p.title_in_de = 'abc'
+      p.title.should == 'abc'
+    end
+
+    it "returns english translation when current cannot be found and nil_to_blank is active" do
+      I18n.locale = :de
+      Product.translated_attributes_options[:nil_to_blank] = true
+      Product.new.title.should == ''
+      
+      p = Product.new
+      p.title_in_en = 'abc'
       p.title.should == 'abc'
     end
   end
