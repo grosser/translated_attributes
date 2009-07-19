@@ -7,11 +7,11 @@ ActiveRecord::Schema.define(:version => 1) do
 
   %w[translations user_translations].each do |table|
     create_table table do |t|
-      t.string :attribute
-      t.text :text
-      t.string :language
-      t.integer :translatable_id
-      t.string :translatable_type
+      t.integer :translatable_id, :null=>false
+      t.string :translatable_type, :limit=>40, :null=>false
+      t.string :language, :limit=>2, :null=>false
+      t.string :attribute, :limit=>40, :null=>false
+      t.text :text, :null=>false
     end
   end
 end

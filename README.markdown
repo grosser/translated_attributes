@@ -5,20 +5,20 @@ Atm there are 2 ways for making a Model translatable that I know of:
  - have a copy of a model, where the copy has a language and all fields mirrored (-> need to migrate translation in sync with model)
  - have all the translations on the same model(-> n fields for every attribute)
 
-both are eneffective when it comes to huge data ammounts and need frequent updates/migrations, which is hard with large datasets.
+both are ineffective when it comes to huge data ammounts and need frequent updates/migrations, which is hard with large datasets.
 
 Solution
 ========
-Create 'virtual' attributes, that can be added on the fly without overhead or migrations, while storing all the data in a never-changing translations table.
+Rails plugin/ActiveRecord gem that creates 'virtual' attributes, which can be added on the fly without overhead or migrations, while storing all the data in a never-changing translations table.
 This keeps the attatched model light and allows to add/remove fields on the fly without migrations.
 
 Validations work like normal with current field (e.g. title) or any translation (e.g. title_in_en)
 
 Usage
 =====
-Setup
-    script/plugin install git://github.com/grosser/translated_attributes.git
-
+ - As Rails plugin  `script/plugin install git://github.com/grosser/translated_attributes.git`
+ - As gem `sudo gem install grosser-translated_attributes --source http://gems.github.com/`
+ - execute MIGRATION
     class Product < ActiveRecord::Base
       translated_attributes :description, :title, :additional_info
     end
