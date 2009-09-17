@@ -2,7 +2,6 @@ require 'spec/spec_helper'
 
 describe 'Translated attributes' do
   before do
-    Product.translated_attributes_options[:nil_to_blank] = false
     I18n.locale = :en
   end
 
@@ -55,21 +54,17 @@ describe 'Translated attributes' do
       p.title.should == 'abc'
     end
 
+    it "returns english translation when current cannot be found" do
+      I18n.locale = :de
+      p = Product.new
+      p.title_in_en = 'abc'
+      p.title.should == 'abc'
+    end
 
     it "returns any translation when current and english cannot be found" do
       I18n.locale = :fr
       p = Product.new
       p.title_in_de = 'abc'
-      p.title.should == 'abc'
-    end
-
-    it "returns english translation when current cannot be found and nil_to_blank is active" do
-      I18n.locale = :de
-      Product.translated_attributes_options[:nil_to_blank] = true
-      Product.new.title.should == ''
-      
-      p = Product.new
-      p.title_in_en = 'abc'
       p.title.should == 'abc'
     end
   end
@@ -88,7 +83,7 @@ describe 'Translated attributes' do
       lambda{ Product.create! :title=>'   ' }.should_not change(Translation, :count)
       Product.last.title.should == nil
     end
-    
+
     it "creates no translation when validations fail" do
       p = Product.new :title=>'xxx'
       p.should_receive(:valid?).and_return false
@@ -248,13 +243,21 @@ describe 'Translated attributes' do
       p.description_in_de.should == 'de descr'
       p.title_in_en.should == nil
     end
-    
+
     it "stores and overwrites on save" do
       p = Product.create!(:title=>'en title')
       p.translated_attributes = {:de=>{:title=>'de title',:description=>'de descr'}}
       p.save!
       Product.last.title.should == 'de title'
       Product.last.title_in_de.should == 'de title'
+    end
+
+    it "does not store unknown attributes" do
+      p = Product.new
+      p.translated_attributes = {:de=>{:xxx=>'de title',:description=>'de descr'}}
+      lambda{
+        p.save!
+      }.should change(Translation, :count).by(+1)
     end
 
     it "does not alter the given hash" do

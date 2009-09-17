@@ -1,14 +1,3 @@
-Problem
-=======
-Atm there are 2 ways for making a Model translatable that I know of:
-
- - have a copy of a model, where the copy has a language and all fields mirrored (-> need to migrate translation in sync with model)
- - have all the translations on the same model(-> n fields for every attribute)
-
-both are ineffective when it comes to huge data ammounts and need frequent updates/migrations, which is hard with large datasets.
-
-Solution
-========
 Rails plugin/ActiveRecord gem that creates 'virtual' attributes, which can be added on the fly without overhead or migrations, while storing all the data in a never-changing translations table.
 This keeps the attatched model light and allows to add/remove fields on the fly without migrations.
 
@@ -33,9 +22,9 @@ Setting / getting
     product.title = 'Simple setting' #sets title_in_en when I18n.locale == :en
     product.title_in_de = 'Spezifisches speichern'
 
-    #generic
-    product.title=('Specific setting', :en)
-    product.title(:en) -> 'Specific setting'
+    #generic setter/getter
+    product.set_title('Specific setting', :en)
+    product.get_title(:en) -> 'Specific setting'
 
 Usage with saving works exactly like normal saving, e.g. new/create/update_attributes...
     Product.new(:title_in_en=>'Hello').save!

@@ -5,7 +5,7 @@ module TranslatedAttributes
       #store options
       cattr_accessor :translated_attributes_options
       options = args.extract_options! || {}
-      self.translated_attributes_options = options.merge(:fields=>args)
+      self.translated_attributes_options = options.merge(:fields=>args.map(&:to_sym))
 
       #create translations class
       table_name = options[:table_name] || :translations
@@ -33,20 +33,19 @@ module TranslatedAttributes
     def self.included(base)
       fields = base.translated_attributes_options[:fields]
       fields.each do |field|
-        base.class_eval <<GETTER_AND_SETTER
-          def #{field}(locale=nil)
+        base.class_eval <<-GETTER_AND_SETTER
+          def get_#{field}(locale=nil)
             get_translated_attribute(locale, :#{field})
           end
 
-          def #{field}=(value, locale=I18n.locale)
+          def set_#{field}(value, locale=I18n.locale)
             set_translated_attribute(locale, :#{field}, value)
           end
 
-          #TODO if options[:setter_and_getters]
-          #backwards compatability...
-          alias get_#{field} #{field}
-          alias set_#{field} #{field}=
-GETTER_AND_SETTER
+          #generic aliases (and since e.g. title=(a,b) would not be possible)
+          alias #{field} get_#{field}
+          alias #{field}= set_#{field}
+        GETTER_AND_SETTER
       end
 
       base.after_save :store_translated_attributes
@@ -66,7 +65,7 @@ GETTER_AND_SETTER
           found ? found[1][field] : nil
         end
       end
-      
+
       if self.class.translated_attributes_options[:nil_to_blank]
         text || ''
       else
@@ -100,9 +99,9 @@ GETTER_AND_SETTER
       field, locale = parse_translated_attribute_method(name)
       return super unless field
       if name.to_s.include? '=' #is setter ?
-        send("#{field}=", args[0], locale)
+        send("set_#{field}", args[0], locale)
       else
-        send(field, locale)
+        send("get_#{field}", locale)
       end
     end
 
@@ -114,6 +113,7 @@ GETTER_AND_SETTER
       @translated_attributes.each do |locale, attributes|
         attributes.each do |attribute, value|
           next if value.blank?
+          next unless self.class.translated_attributes_options[:fields].include? attribute.to_sym
           translations.create!(:attribute=>attribute, :text=>value, :language=>locale)
         end
       end
