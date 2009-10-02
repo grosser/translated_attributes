@@ -8,6 +8,8 @@ Usage
  - As Rails plugin  `script/plugin install git://github.com/grosser/translated_attributes.git`
  - As gem `sudo gem install grosser-translated_attributes --source http://gems.github.com/`
  - execute MIGRATION
+
+Adding attributes:
     class Product < ActiveRecord::Base
       translated_attributes :description, :title, :additional_info
     end
