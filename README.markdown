@@ -6,7 +6,7 @@ Validations work like normal with current field (e.g. title) or any translation 
 Usage
 =====
  - As Rails plugin  `script/plugin install git://github.com/grosser/translated_attributes.git`
- - As gem `sudo gem install grosser-translated_attributes --source http://gems.github.com/`
+ - As gem `sudo gem install translated_attributes`
  - execute MIGRATION
 
 Adding attributes:
