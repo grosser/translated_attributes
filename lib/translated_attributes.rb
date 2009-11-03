@@ -125,7 +125,7 @@ module TranslatedAttributes
     def merge_db_translations_with_instance_variable
       return if new_record? or @db_translations_merged
       @db_translations_merged = true
-      translations.all.each do |t|
+      translations.each do |t|
         translated_attributes_for(t.language)[t.attribute] = t.text
       end
     end

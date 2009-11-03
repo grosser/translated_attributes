@@ -136,7 +136,7 @@ describe 'Translated attributes' do
     it "loads translations once" do
       Product.create!(:title=>'xx', :description=>'yy')
       p = Product.last
-      p.translations.should_receive(:all).and_return []
+      p.should_receive(:translations).and_return []
       p.title.should == nil
       p.description.should == nil
     end
