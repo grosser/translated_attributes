@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Michael Grosser"]
-  s.date = %q{2009-11-03}
+  s.date = %q{2009-11-22}
   s.email = %q{grosser.michael@gmail.com}
   s.extra_rdoc_files = [
     "README.markdown"
@@ -17,28 +17,19 @@ Gem::Specification.new do |s|
   s.files = [
     "MIGRATION",
      "README.markdown",
-     "README.markdown",
      "Rakefile",
-     "VERSION",
      "VERSION",
      "init.rb",
      "lib/translated_attributes.rb",
-     "lib/translated_attributes.rb",
-     "rdoc/README.rdoc",
-     "spec/integration_spec.rb",
      "spec/integration_spec.rb",
      "spec/models.rb",
-     "spec/models.rb",
      "spec/spec_helper.rb",
-     "spec/spec_helper.rb",
-     "spec/translated_attributes_spec.rb",
      "spec/translated_attributes_spec.rb",
      "translated_attributes.gemspec"
   ]
   s.homepage = %q{http://github.com/grosser/translated_attributes}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubyforge_project = %q{translated-attr}
   s.rubygems_version = %q{1.3.5}
   s.summary = %q{ActiveRecord/Rails simple translatable attributes}
   s.test_files = [
