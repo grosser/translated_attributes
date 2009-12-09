@@ -80,6 +80,7 @@ module TranslatedAttributes
     end
 
     def translated_attributes
+      return @translated_attributes if @translated_attributes
       merge_db_translations_with_instance_variable
       @translated_attributes ||= {}.with_indifferent_access
     end
