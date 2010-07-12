@@ -1,0 +1,8 @@
+Description:
+    Generates the migration file for TranslatedAttributes.
+
+Example:
+    rails generate translated_attributes
+
+    This will create:
+        db/migration/<migration step>_add_translations.rb

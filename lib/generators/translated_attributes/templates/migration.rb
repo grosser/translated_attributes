@@ -3,11 +3,11 @@ class AddTranslations < ActiveRecord::Migration
     #you can remove the limit/null constrains
     #this is simply my recommended way of setting things up (save + limits needed storage space)
     create_table :translations do |t|
-      t.column :translatable_id, :integer, :null=>false
-      t.column :translatable_type, :string, :limit=>40, :null=>false
-      t.column :language, :string, :limit=>2, :null=>false
-      t.column :attribute, :string, :limit=>40, :null=>false
-      t.column :text, :text, :null=>false
+      t.integer :translatable_id, :null=>false
+      t.string :translatable_type, :limit=>40, :null=>false
+      t.string :language, :limit=>2, :null=>false
+      t.string :attr, :limit=>40, :null=>false
+      t.text :text, :null=>false
     end
     add_index :translations, [:translatable_id, :translatable_type]
   end
