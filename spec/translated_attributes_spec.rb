@@ -67,6 +67,24 @@ describe 'Translated attributes' do
       p.title_in_de = 'abc'
       p.title.should == 'abc'
     end
+
+    it "records a change" do
+      p = Product.new
+      p.title = 'abc'
+      p.send(:changed_attributes).should == {'title_in_en' => nil}
+    end
+
+    it "does not record changes for nil to blank" do
+      p = Product.new
+      p.title = ''
+      p.send(:changed_attributes).should == {}
+    end
+
+    it "does not record changes for unchanged" do
+      p = Product.create!(:title_in_en => 'abc')
+      p.title = 'abc'
+      p.send(:changed_attributes).should == {}
+    end
   end
 
   describe 'storing' do

@@ -75,7 +75,7 @@ module TranslatedAttributes
 
     def set_translated_attribute(locale, field, value)
       old_value = translated_attributes_for(locale)[field]
-      return if old_value == value
+      return if old_value.to_s == value.to_s
       changed_attributes.merge!("#{field}_in_#{locale}" => old_value)
       translated_attributes_for(locale)[field] = value
       @translated_attributes_changed = true
