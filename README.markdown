@@ -7,7 +7,8 @@ Usage
 =====
  - As Rails plugin  `script/plugin install git://github.com/grosser/translated_attributes.git`
  - As gem `sudo gem install translated_attributes`
- - execute MIGRATION
+ - generate migrations: `rails generate translated_attributes`(Rails2: [do it by manually](http://github.com/grosser/translated_attributes/blob/master/lib/generators/translated_attributes/templates/migration.rb))
+ - `rake db:migrate`
 
 Adding attributes:
     class Product < ActiveRecord::Base
@@ -42,8 +43,13 @@ Options
     :table_name => 'user_translations', #default is translations
     :nil_to_blank => true, #return unfound translations as blank strings ('') instead of nil (default false),
     :translatable_name => 'translated' #name of the associated translatable (Product has_many :translations a Translation belongs_to XXX), default is :translatable
+
 Author
 ======
+
+###Contributors
+ - [Stefano Diem Benatti](http://github.com/teonimesic)
+
 [Michael Grosser](http://pragmatig.wordpress.com)  
 grosser.michael@gmail.com  
 Hereby placed under public domain, do what you want, just do not hold me accountable...
