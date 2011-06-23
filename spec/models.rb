@@ -10,7 +10,7 @@ ActiveRecord::Schema.define(:version => 1) do
       t.integer :translatable_id, :null=>false
       t.string :translatable_type, :limit=>40, :null=>false
       t.string :language, :limit=>2, :null=>false
-      t.string :attribute, :limit=>40, :null=>false
+      t.string :translated_attribute, :limit=>40, :null=>false
       t.text :text, :null=>false
     end
   end

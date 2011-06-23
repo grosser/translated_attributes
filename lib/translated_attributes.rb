@@ -1,10 +1,13 @@
+require 'active_record'
+
 module TranslatedAttributes
   module ClassMethods
     # translated_attributes :title, :description, :table_name=>'my_translations'
     def translated_attributes(*args)
       #store options
       cattr_accessor :translated_attributes_options
-      options = args.extract_options! || {}
+      options = (args.extract_options! || {}).dup
+      options[:attribute_column] ||= :translated_attribute
       self.translated_attributes_options = options.merge(:fields=>args.map(&:to_sym))
 
       #create translations class
@@ -117,7 +120,7 @@ module TranslatedAttributes
         attributes.each do |attribute, value|
           next if value.blank?
           next unless self.class.translated_attributes_options[:fields].include? attribute.to_sym
-          translations.create!(:attribute=>attribute, :text=>value, :language=>locale)
+          translations.create!(translated_attributes_options[:attribute_column] => attribute, :text=>value, :language=>locale)
         end
       end
       @translated_attributes_changed = false
@@ -129,7 +132,7 @@ module TranslatedAttributes
       return if new_record? or @db_translations_merged
       @db_translations_merged = true
       translations.each do |t|
-        translated_attributes_for(t.language)[t.attribute] = t.text
+        translated_attributes_for(t.language)[t[translated_attributes_options[:attribute_column]]] = t.text
       end
     end
 

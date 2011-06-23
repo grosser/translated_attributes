@@ -6,7 +6,7 @@ class AddTranslations < ActiveRecord::Migration
       t.integer :translatable_id, :null=>false
       t.string :translatable_type, :limit=>40, :null=>false
       t.string :language, :limit=>2, :null=>false
-      t.string :attribute, :limit=>40, :null=>false
+      t.string :translated_attribute, :limit=>40, :null=>false
       t.text :text, :null=>false
     end
     add_index :translations, [:translatable_id, :translatable_type]

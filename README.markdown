@@ -5,9 +5,9 @@ Validations work like normal with current field (e.g. title) or any translation 
 
 Usage
 =====
- - As Rails plugin  `script/plugin install git://github.com/grosser/translated_attributes.git`
- - As gem `sudo gem install translated_attributes`
- - generate migrations: `rails generate translated_attributes`(Rails2: [do it by manually](http://github.com/grosser/translated_attributes/blob/master/lib/generators/translated_attributes/templates/migration.rb))
+ - As Rails plugin  `rails plugin install git://github.com/grosser/translated_attributes.git`
+ - As gem `gem install translated_attributes`
+ - generate migrations: `rails generate translated_attributes`(Rails2: [do it by hand](http://github.com/grosser/translated_attributes/blob/master/lib/generators/translated_attributes/templates/migration.rb))
  - `rake db:migrate`
 
 Adding attributes:
@@ -40,9 +40,10 @@ Usage with saving works exactly like normal saving, e.g. new/create/update_attri
 Options
 =======
     translated_attributes :title, :heading,
-    :table_name => 'user_translations', #default is translations
-    :nil_to_blank => true, #return unfound translations as blank strings ('') instead of nil (default false),
-    :translatable_name => 'translated' #name of the associated translatable (Product has_many :translations a Translation belongs_to XXX), default is :translatable
+    :table_name => 'user_translations', # default is translations
+    :nil_to_blank => true, # return unfound translations as blank strings ('') instead of nil (default false),
+    :translatable_name => 'translated' # name of the associated translatable (Product has_many :translations a Translation belongs_to XXX), default is :translatable
+    :attribute_column => 'attribute' # switch to the old Rails 2 default (default: translated_attribute)
 
 Author
 ======
