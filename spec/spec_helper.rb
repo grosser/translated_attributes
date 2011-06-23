@@ -1,6 +1,3 @@
-# ---- requirements
-require 'rubygems'
-require 'spec'
 require 'active_record'
 
 $LOAD_PATH << File.expand_path("../lib", File.dirname(__FILE__))
