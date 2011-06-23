@@ -197,6 +197,11 @@ describe 'Translated attributes' do
       Product.last.title.should == 't2'
       Product.last.description.should == 'd2'
     end
+
+    it "does not cancel callbacks on parent" do
+      u = User.create!(:name => 'NAME')
+      u.version.should == 1
+    end
   end
 
   describe 'classes' do

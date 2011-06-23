@@ -1,5 +1,6 @@
 ActiveRecord::Schema.define(:version => 1) do
   create_table :users do |t|
+    t.integer :version, :default => 0, :null => false
   end
 
   create_table :products do |t|
@@ -19,6 +20,11 @@ end
 #create model
 class User < ActiveRecord::Base
   translated_attributes :name, :table_name=>:user_translations, :nil_to_blank=>true
+  after_save :inc_version
+
+  def inc_version
+    self.version += 1
+  end
 end
 
 class Shop < ActiveRecord::Base

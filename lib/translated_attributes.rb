@@ -124,6 +124,7 @@ module TranslatedAttributes
         end
       end
       @translated_attributes_changed = false
+      true
     end
 
     private
