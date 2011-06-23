@@ -9,13 +9,12 @@ task :all do
 end
 
 begin
-  project_name = 'translated_attributes'
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = project_name
+    gem.name = 'translated_attributes'
     gem.summary = "ActiveRecord/Rails simple translatable attributes"
-    gem.email = "grosser.michael@gmail.com"
-    gem.homepage = "http://github.com/grosser/#{project_name}"
+    gem.email = "michael@grosser.it"
+    gem.homepage = "http://github.com/grosser/#{gem.name}"
     gem.authors = ["Michael Grosser"]
     gem.add_dependency ['activerecord']
   end
