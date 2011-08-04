@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{translated_attributes}
-  s.version = "0.6.0"
+  s.version = "0.6.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Michael Grosser"]
-  s.date = %q{2011-06-23}
+  s.date = %q{2011-08-04}
   s.email = %q{michael@grosser.it}
   s.files = [
     "Gemfile",
@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
     "lib/generators/translated_attributes/templates/migration.rb",
     "lib/generators/translated_attributes/translated_attributes_generator.rb",
     "lib/translated_attributes.rb",
+    "lib/translated_attributes/caching.rb",
     "spec/integration_spec.rb",
     "spec/models.rb",
     "spec/spec_helper.rb",
